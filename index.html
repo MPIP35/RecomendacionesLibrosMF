@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recomendaciones de Libros</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Georgia,serif;background:#0d1117;color:#f5f1e8;
+}
+.hero{
+ min-height:42vh;padding:70px 8%;display:flex;flex-direction:column;justify-content:center;
+ background:linear-gradient(135deg,#111827,#26364a);
+}
+.hero small{letter-spacing:4px;text-transform:uppercase;color:#b8c7d9}
+h1{font-size:clamp(42px,7vw,86px);margin:15px 0 10px;font-weight:500}
+.hero p{max-width:700px;font:18px/1.7 Arial,sans-serif;color:#d6dde6}
+.gallery{padding:55px 8%;max-width:1400px;margin:auto}
+.gallery h2{font-size:32px;font-weight:400;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:22px}
+.card{
+ position:relative;height:370px;border-radius:18px;overflow:hidden;cursor:pointer;
+ background:#202938;box-shadow:0 12px 35px #0005;transition:.3s;
+}
+.card:hover{transform:translateY(-7px);box-shadow:0 20px 45px #0008}
+.card img{width:100%;height:100%;object-fit:cover;display:block;transition:.5s}
+.card:hover img{transform:scale(1.06)}
+.card .caption{
+ position:absolute;bottom:0;left:0;right:0;padding:70px 18px 18px;
+ background:linear-gradient(transparent,#000d)
+}
+.card h3{margin:3px 0;font-size:22px;font-weight:400}
+.card span{font:13px Arial,sans-serif;color:#cbd5e1}
+.modal{
+ position:fixed;inset:0;background:#05080dcc;backdrop-filter:blur(10px);
+ display:none;align-items:center;justify-content:center;padding:25px;z-index:10
+}
+.modal.open{display:flex}
+.modal-box{
+ background:#111827;border:1px solid #ffffff18;border-radius:22px;max-width:1050px;width:100%;
+ max-height:90vh;overflow:auto;display:grid;grid-template-columns:40% 60%;
+ box-shadow:0 30px 80px #000b
+}
+.modal img{width:100%;height:100%;min-height:560px;object-fit:cover}
+.content{padding:45px}
+.content .category{font:13px Arial,sans-serif;letter-spacing:2px;color:#9fb2c8;text-transform:uppercase}
+.content h2{font-size:42px;font-weight:400;margin:10px 0 4px}
+.author{font:16px Arial,sans-serif;color:#b8c7d9;margin-bottom:25px}
+.content p{font:17px/1.85 Arial,sans-serif;color:#d4dae2}
+.close{
+ position:absolute;right:25px;top:20px;border:0;background:#ffffff18;color:white;
+ width:44px;height:44px;border-radius:50%;font-size:25px;cursor:pointer
+}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:850px){
+ .grid{grid-template-columns:repeat(3,1fr)}
+ .modal-box{grid-template-columns:1fr}
+ .modal img{min-height:320px;max-height:380px}
+}
+@media(max-width:560px){
+ .grid{grid-template-columns:repeat(2,1fr);gap:14px}
+ .card{height:290px}
+ .gallery{padding:40px 5%}
+ .content{padding:30px}
+ .content h2{font-size:32px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+ <small>UNAS RECOMENDACIONES PARA TI</small>
+ <h1>Recomendaciones de libros</h1>
+ <p>
+  Para que tengas opciones para grandes lecturas:
+  Cultura, Historias, Concientizacion, Reflexion y Entretenimiento.
+ </p>
+</header>
+
+<main class="gallery">
+ <h2>30 libros para descubrir</h2>
+ <h3>ATT: El Mejor Ex-Novio de la vida</h3>
+ <div class="grid" id="grid"></div>
+</main>
+
+<div class="modal" id="modal">
+ <button class="close" id="close">×</button>
+ <div class="modal-box">
+   <img id="modalImg" alt="">
+   <div class="content">
+     <div class="category" id="modalCategory"></div>
+     <h2 id="modalTitle"></h2>
+     <div class="author" id="modalAuthor"></div>
+     <div id="modalText"></div>
+   </div>
+ </div>
+</div>
+
+<script>
+const libros = [
+
+    {
+      titulo: "Y no quedo ninguno",
+      autor: "Agatha Christie",
+      categoria: "Recomendación 01",
+      portada: "Recomendacion Libros/Libro 1.jpg",
+      texto: "Diez personas que no se han visto nunca son invitados por un huésped desconocido a pasar unos días de vacaciones en una lujosa mansión, situada en una isla de la costa inglesa. Durante la cena, una misteriosa grabación desvelará que cada uno de los presentes tiene algo que esconder y un crimen por el que pagar."
+    },
+    {
+      titulo: "Entre el mundo y yo",
+      autor: "Ta Nehisi Coates",
+      categoria: "Recomendación 02",
+      portada: "Recomendacion Libros/Libro 2.jpg",
+      texto: "Una carta de un padre a su hijo. Una profunda reflexión sobre la realidad social de la Norteamérica actual que recoge grandes temas universales como la discriminación, la desigualdad y el activismo necesario para combatirlas."
+    },
+    {
+      titulo: "Perder es cuestion de metodo",
+      autor: "Santiago Gamboa",
+      categoria: "Recomendación 03",
+      portada: "Recomendacion Libros/Libro 3.jpg",
+      texto: "arranca con el hallazgo de un cadáver desnudo y empalado a orillas de la represa del Sisga, cerca de Bogotá. El periodista Víctor Silanpa y su improvisado ayudante investigan el crimen, adentrándose en una red de corrupción política, mafia y peligro."
+    },
+    {
+      titulo: "Vagabond",
+      autor: "Takehiko Inoue",
+      categoria: "Recomendación 04",
+      portada: "Recomendacion Libros/Libro 4.jpg",
+      texto: "La historia comienza tras la sangrienta batalla de Sekigahara, cuando un joven violento llamado Takezo decide abandonar su pasado, cambiar su nombre a Musashi y buscar el autoconocimiento a través del Camino de la Espada."
+    },
+    {
+      titulo: "Colombia: Una historia minima",
+      autor: "Jorge Orlando Melo",
+      categoria: "Recomendación 05",
+      portada: "Recomendacion Libros/Libro 5.jpg",
+      texto: "es un recorrido completo por la historia de Colombia desde los primeros pobladores indígenas hasta el siglo XXI. El libro explica los procesos políticos, sociales y económicos del país sin caer en visiones sesgadas o simplistas."
+    },
+    {
+      titulo: "La paciente Silenciosa",
+      autor: "Alex Michaelides",
+      categoria: "Recomendación 06",
+      portada: "Recomendacion Libros/Libro 6.jpg",
+      texto: "Narra la historia de Alicia Berenson, una pintora que le dispara a su esposo cinco veces en la cabeza y guarda un silencio absoluto durante años. Theo Faber, un psicoterapeuta obsesionado con el caso, busca hacerla hablar para descubrir la verdad detrás del crimen."
+    },
+    {
+      titulo: "La mujer descalza y Nuestra Señora del Nilo",
+      autor: "Scholastique Mukasonga",
+      categoria: "Recomendación 07",
+      portada: "Recomendacion Libros/Libro 7.jpg",
+      texto: "Mukasonga, superviviente tutsi que perdió a gran parte de su familia, retrata en el primer libro la resistencia cotidiana de las madres antes del exterminio, y en el segundo cómo se gestó el odio étnico en un internado durante los años setenta."
+    },
+    {
+      titulo: "El mejor desarrollador inmobiliario",
+      autor: "BK_Moon",
+      categoria: "Recomendación 08",
+      portada: "Recomendacion Libros/Libro 8.jpg",
+      texto: "Cuando el estudiante de ingeniería civil Suho Kim se queda dormido leyendo una novela de fantasía, ¡se despierta como un personaje del libro! Suho se encuentra ahora en el cuerpo de Lloyd Frontera, un noble perezoso al que le encanta beber y cuya familia está sumida en una montaña de deudas. Utilizando sus conocimientos de ingeniería, Suho diseña inventos para evitar el terrible futuro que le aguarda."
+    },
+    {
+      titulo: "Matar a un ruiseñor",
+      autor: "Harper Lee",
+      categoria: "Recomendación 09",
+      portada: "Recomendacion Libros/Libro 9.jpg",
+      texto: "En el pequeño pueblo de Maycomb, Alabama, durante los años treinta, un hombre negro es acusado de violar a una mujer blanca. Atticus Finch, abogado íntegro y viudo a cargo de sus dos hijos, Jem y Scout, decide ponerse al frente de una defensa imposible."
+    },
+    {
+      titulo: "Historia concisa de colombia",
+      autor: " German Mejia Pavony y Michael J. La Rosa",
+      categoria: "Recomendación 10",
+      portada: "Recomendacion Libros/Libro 10.jpg",
+      texto: "Una historia contemporánea de Colombia que comprende los procesos que han llevado al país a ser lo que es hoy. Al fin un libro de historia de Colombia que no se queda en el pasado violento y los males atávicos."
+    },
+    {
+      titulo: "A lomo de mula",
+      autor: "Alfredo Molina",
+      categoria: "Recomendación 11",
+      portada: "Recomendacion Libros/Libro 11.jpg",
+      texto: " El libro recopila doce textos que exploran los sucesos iniciados en mayo de 1964 con la operación militar contra la llamada República independiente de Marquetalia , el hecho que dio pie a la larga confrontación armada entre el Estado y las FARC."
+    },
+    {
+      titulo: "El hogar de Miss Peregrine para niños peculiares",
+      autor: " Ransom Riggs",
+      categoria: "Recomendación 12",
+      portada: "Recomendacion Libros/Libro 12.jpg",
+      texto: "De niño, Jacob creó un vinculo muy especial con su abuelo, que le contaba extrañas historias y le enseñaba fotografías de niñas levitando y niños invisibles. Ahora, siguiendo la pista de una misteriosa carta, emprende un viaje hacia la isla remota de Gales en la que su abuelo se crió. Allí, encuentra vivos a los niños y niñas de las fotografías aunque los lugareños afi rmen que murieron hace muchos años."
+    },
+    {
+      titulo: "Lucifer",
+      autor: "Mike Carey",
+      categoria: "Recomendación 13",
+      portada: "Recomendacion Libros/Libros 13.jpg",
+      texto: "Narra la historia de Lucifer Morningstar, quien renuncia al trono del Infierno y abre un piano bar en Los Ángeles."
+    },
+    {
+      titulo: "Las estrellas son negras",
+      autor: "Arnoldo Palacios",
+      categoria: "Recomendación 14",
+      portada: "Recomendacion Libros/Libro 14.jpg",
+      texto: "Narra 24 horas en la vida de Irra (Israel), un joven que sobrevive en una Quibdó empobrecida y marginada de los años cuarenta. La obra expone de forma cruda el hambre, el racismo, la desigualdad social y el abandono estata."
+    },
+    {
+      titulo: "Chango, el gran putas",
+      autor: "Manuel Zapata Olivella",
+      categoria: "Recomendación 15",
+      portada: "Recomendacion Libros/Libro 15.jpg",
+      texto: "Cuenta quinientos años de historia de la gente negra desde África hasta América. Mezcla mitos de los dioses yoruba con hechos reales de la esclavitud y la lucha por la libertad."
+    },
+    {
+      titulo: "El ultimo templario",
+      autor: "Raymond Khoury",
+      categoria: "Recomendación 16",
+      portada: "Recomendacion Libros/Libro 16.jpg",
+      texto: "La Inquisición tortura durante seis años al único superviviente templario, pero no logra arrancarle el secreto mejor guardado de la historia."
+    },
+    {
+      titulo: "Rebelion en la granja",
+      autor: "George Orwell",
+      categoria: "Recomendación 17",
+      portada: "Recomendacion Libros/Libro 17.jpg",
+      texto: "Cuenta cómo los animales de una granja echan a su dueño humano por maltrato y deciden gobernar ellos mismos. Al final, los cerdos que mandan se vuelven tiranos y actúan igual que los humanos, destruyendo el sueño de igualdad."
+    },
+    {
+      titulo: "El viejo y el mar",
+      autor: "Ernest Hemingway",
+      categoria: "Recomendación 18",
+      portada: "Recomendacion Libros/Libro 18.jpg",
+      texto: "Narra la épica y solitaria lucha de un viejo pescador cubano llamado Santiago contra un gigantesco marlín."
+    },
+    {
+      titulo: "Joyas de la literatura",
+      autor: "Varios Autores",
+      categoria: "Recomendación 19",
+      portada: "Recomendacion Libros/Libro 19.jpg",
+      texto: "Obras maestras que muestran la historia, la cultura y los sentimientos del país a través de la prosa y la poesía."
+    },
+    {
+      titulo: "El amor en los tiempos del cólera",
+      autor: "Gabriel García Márquez",
+      categoria: "Recomendación 20",
+      portada: "Recomendacion Libros/Libro 20.jpg",
+      texto: "Nrra la historia de amor de más de cincuenta años entre Florentino Ariza y Fermina Daza."
+    },
+    
+];
+
+const grid=document.getElementById("grid");
+const modal=document.getElementById("modal");
+
+libros.forEach((libro)=>{
+ const card=document.createElement("article");
+ card.className="card";
+ card.innerHTML=`
+   <img src="${libro.portada}" alt="${libro.titulo}">
+   <div class="caption">
+     <span>${libro.categoria}</span>
+     <h3>${libro.titulo}</h3>
+     <span>${libro.autor}</span>
+   </div>`;
+ card.onclick=()=>{
+   modal.classList.add("open");
+   document.getElementById("modalImg").src=libro.portada;
+   document.getElementById("modalTitle").textContent=libro.titulo;
+   document.getElementById("modalAuthor").textContent=libro.autor;
+   document.getElementById("modalCategory").textContent=libro.categoria;
+   document.getElementById("modalText").innerHTML=`<p>${libro.texto}</p>`;
+ };
+ grid.appendChild(card);
+});
+
+document.getElementById("close").onclick=()=>modal.classList.remove("open");
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove("open")};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")modal.classList.remove("open")});
+</script>
+</body>
+</html>
